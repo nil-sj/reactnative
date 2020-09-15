@@ -3,7 +3,7 @@ import { Text, ScrollView, FlatList } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import { PARTNERS } from '../shared/partners';
 
-function Mission({}) {
+function Mission() {
     
     return (
         <Card 
@@ -17,7 +17,7 @@ function Mission({}) {
 }
 
 class About extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ class About extends Component {
     }
 
     render() {
-        
+
         const renderPartner = ({item}) => {
             return (
                 <ListItem
@@ -40,7 +40,6 @@ class About extends Component {
                 />
             );
         };
-
 
         return (
             <ScrollView>
@@ -59,4 +58,4 @@ class About extends Component {
     }
 }
 
-export default About; 
+export default About;
