@@ -3,7 +3,7 @@ import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet } from 'rea
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite } from '../redux/ActionCreators';
+import { postFavorite, postComment } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -14,7 +14,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    postFavorite: campsiteId => (postFavorite(campsiteId))
+    postFavorite: campsiteId => (postFavorite(campsiteId)),
+    postComment: (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text))
 };
 
 function RenderCampsite(props) {
@@ -105,7 +106,7 @@ class CampsiteInfo extends Component {
     }
 
     handleComment(campsiteId){
-        console.log(JSON.stringify(this.state));
+        this.props.postComment(campsiteId, this.state.rating, this.state.author, this.state.text);
         this.toggleModal();
     }
 
@@ -174,16 +175,16 @@ class CampsiteInfo extends Component {
                                 color = "#5637DD"
                                 title = 'Submit'
                             />
-                            <View style={{marginTop: 10}}> 
-                                <Button
-                                    onPress={() => {
-                                        this.toggleModal();
-                                        this.resetForm();
-                                    }}
-                                    color='#808080'
-                                    title='Cancel'
-                                />
-                            </View>
+                        </View>
+                        <View style={{margin: 10}}> 
+                            <Button
+                                onPress={() => {
+                                    this.toggleModal();
+                                    this.resetForm();
+                                }}
+                                color='#808080'
+                                title='Cancel'
+                            />
                         </View>
                     </View>
                 </Modal>
