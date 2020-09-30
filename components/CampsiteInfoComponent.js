@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList,
     Modal, Button, StyleSheet,
-    Alert, PanResponder } from 'react-native';
+    Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -63,6 +63,16 @@ function RenderCampsite(props) {
         }
     });
 
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: `${title}: ${message} ${url}`,
+            url: url
+        },{
+            dialogTitle: 'Share ' + title
+        });
+    };
+
     if (campsite) {
         return (
             <Animatable.View
@@ -77,7 +87,7 @@ function RenderCampsite(props) {
                     <Text style={{margin: 10}}>
                         {campsite.description}
                     </Text>
-                    <View style={style.cardRow}>
+                    <View style={styles.cardRow}>
                         <Icon
                             name={props.favorite ? 'heart' : 'heart-o'}
                             type='font-awesome'
@@ -87,13 +97,23 @@ function RenderCampsite(props) {
                             onPress={() => props.favorite ? 
                                 console.log('Already set as a favorite') : props.markFavorite()}
                         />
-                        <Icon style={style.CardItem}
+                        <Icon 
                             name='pencil'
                             type='font-awesome'
                             color='#5637DD'
+                            style={styles.CardItem}
                             raised
                             reverse
                             onPress={() => props.onShowModal()}
+                        />
+                        <Icon
+                            name={'share'}
+                            type='font-awesome'
+                            color='#5637DD'
+                            style={styles.cardItem}
+                            raised
+                            reverse
+                            onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} 
                         />
                     </View>
                 </Card>
@@ -195,7 +215,7 @@ class CampsiteInfo extends Component {
                     transparent={false}
                     visible={this.state.showModal}
                     onRequestClose={() => this.toggleModal()}>
-                    <View style={style.modal}>
+                    <View style={styles.modal}>
                         <Rating
                             showRating
                             startingValue={this.state.rating}
@@ -244,7 +264,7 @@ class CampsiteInfo extends Component {
     }
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     cardRow: {
         alignItems: 'center',
         justifyContent: 'center',
